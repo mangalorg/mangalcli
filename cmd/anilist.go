@@ -4,12 +4,23 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	json "github.com/json-iterator/go"
 	"github.com/mangalorg/libmangal"
+	"github.com/mangalorg/mangalcli/cache"
 	"os"
 )
 
-func newAnilist() libmangal.Anilist {
+func newAnilist(ctx *Context) libmangal.Anilist {
 	options := libmangal.DefaultAnilistOptions()
+	options.Log = func(msg string) {
+		fmt.Fprintln(ctx.LogWriter, msg)
+	}
+
+	options.QueryToIDsStore = cache.New("query-to-id")
+	options.TitleToIDStore = cache.New("title-to-id")
+	options.IDToMangaStore = cache.New("id-to-manga")
+	options.AccessTokenStore = cache.New("access-token")
+
 	return libmangal.NewAnilist(options)
 }
 
@@ -23,8 +34,8 @@ type anilistGetCmd struct {
 	Id int `arg:"" help:"anilist manga id"`
 }
 
-func (a *anilistGetCmd) Run() error {
-	anilist := newAnilist()
+func (a *anilistGetCmd) Run(ctx *Context) error {
+	anilist := newAnilist(ctx)
 
 	manga, ok, err := anilist.GetByID(context.Background(), a.Id)
 	if err != nil {
@@ -35,7 +46,7 @@ func (a *anilistGetCmd) Run() error {
 		return errors.New("not found")
 	}
 
-	marshalled, err := marshal(manga)
+	marshalled, err := json.MarshalToString(manga)
 	if err != nil {
 		return err
 	}
@@ -48,15 +59,15 @@ type anilistSearchCmd struct {
 	Query string `arg:"" help:"search query"`
 }
 
-func (a *anilistSearchCmd) Run() error {
-	anilist := newAnilist()
+func (a *anilistSearchCmd) Run(ctx *Context) error {
+	anilist := newAnilist(ctx)
 
 	mangas, err := anilist.SearchMangas(context.Background(), a.Query)
 	if err != nil {
 		return err
 	}
 
-	marshalled, err := marshal(mangas)
+	marshalled, err := json.MarshalToString(mangas)
 	if err != nil {
 		return err
 	}
@@ -70,8 +81,8 @@ type anilistBindCmd struct {
 	Id    int    `help:"id to bind"`
 }
 
-func (a *anilistBindCmd) Run() error {
-	anilist := newAnilist()
+func (a *anilistBindCmd) Run(ctx *Context) error {
+	anilist := newAnilist(ctx)
 
 	err := anilist.BindTitleWithID(a.Title, a.Id)
 	if err != nil {

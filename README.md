@@ -6,17 +6,21 @@ as a CLI app.
 
 ## Example
 
+> Documentation is still work in progress... 😪
+
 ```bash
-mangalcli run mangapill.lua --vars="title=chainsaw man" --query "$(cat query.lua)" --json
+mangalcli run mangapill.lua --vars="title=chainsaw man" --exec "$(cat exec.lua)"
 ```
 
 **...where**:
 
 `mangapill.lua` looks like [this](https://github.com/mangalorg/saturno/blob/261c5739eacb73525fbe52705b8862a11c14040f/luas/mangapill.lua);
 
-`query.lua` looks like this:
+`exec.lua` looks like this:
 
 ```lua
+local json = require('json')
+
 local mangas = SearchMangas(Vars.title) -- search with the given title
 local volumes = MangaVolumes(mangas[1]) -- select the first manga
 
@@ -29,11 +33,11 @@ for _, volume in ipairs(volumes) do
   end
 end
 
--- return chapters
-return chapters
+-- chapters encoded in json format for later use
+json.print(chapters)
 ```
 
-and the output would be like the following (because we passed the `--json` flag):
+and the output would be like the following
 
 ```json
 [
@@ -70,19 +74,98 @@ cd mangalcli
 go install .
 ```
 
-## Queries
+## Exec Scripts
 
-Queries use Lua5.1(+ goto statement from Lua5.2)
+Scripts use Lua5.1(+ goto statement from Lua5.2)
 
-`require('sdk')` from [luaprovider](https://github.com/mangalorg/luaprovider)
-isn't available (subject of change)
+`sdk` package from [luaprovider](https://github.com/mangalorg/luaprovider)
+isn't available (subject of change).
 
-It has the following functions available:
+Available functions:
 
-- `SearchMangas(query: string): []Manga`
-- `MangaVolumes(manga: Manga): []Volume`
-- `VolumeChapters(volume: Volume): []Chapter`
-- `ChapterPages(chapter: Chapter): []Page`
+```lua
+--- @alias Manga userdata
+--- @alias Volume userdata
+--- @alias Chapter userdata
+--- @alias Page userdata
+
+--- @alias MangaInfo { title: string, id: number, url: string, cover: string, banner: string }
+--- @alias VolumeInfo { number: number }
+--- @alias ChapterInfo { title: string, url: string, number: number }
+
+--- @alias Format "pdf" | "cbz" | "images"
+
+--- @alias DownloadOptions { format: Format, directory: string, create_manga_dir: boolean, create_volume_dir: boolean, strict: boolean, skip_if_exists: boolean, download_manga_cover: boolean, download_manga_banner: boolean, write_series_json: boolean, write_comic_info_xml: boolean, read_after: boolean, read_incognito: boolean }
+
+--- @param query string
+--- @return []MangaInfo
+function SearchMangas(query) end
+
+--- @param manga Manga
+--- @return []Volume
+function MangaVolumes(manga) end
+
+--- @param volume Volume
+--- @return []Chapter
+function VolumeChapters(volume) end
+
+--- @param chapter Chapter
+--- @return []Page
+function ChapterPages(chapter) end
+
+
+--- @param chapter Chapter
+--- @param options DownloadOptions?
+function DownloadChapter(chapter, options) end
+
+--- Manga, Volume and Chapter has :info() method that would
+--- return appropriate info table as defined above
+---
+--- e.g. manga:info().title
+```
+
+Comes with `anilist` package that has the following functions available:
+
+```lua
+local anilist
+
+--- @alias AnilistManga TODO, see https://pkg.go.dev/github.com/mangalorg/libmangal#AnilistManga
+
+--- @param title string
+--- @return AnilistManga?
+function anilist.find_closest_manga(title) end
+
+--- @param title string'
+--- @return []AnilistManga
+function anilist.search_mangas(title) end
+
+--- @param id number
+--- @return AnilistManga?
+function anilist.get_by_id(id) end
+
+return anilist
+```
+
+And `json` package
+
+```lua
+local json
+
+--- Prints data in json format to stdout
+--- @param data any
+function json.print(data) end
+
+return json
+```
+
+Example:
+
+```lua
+local anilist = require("anilist")
+local json = require("json")
+
+json.print(anilist.search_mangas("one piece"))
+```
 
 And `Vars` global table with variables passed from `--vars` flag.
 
@@ -101,9 +184,3 @@ print(Vars.key2) -- value2
 
 print(tonumber(Vars.key3)) -- 18.2
 ```
-
-Queries must end with `return` statement.
-
-Queries can return any type of data,
-but if the `--download` flag is provided only `Chapter` or `[]Chapter` are allowed
-to be returned.
