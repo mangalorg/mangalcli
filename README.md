@@ -65,7 +65,7 @@ so the only option is to build from source.
 Either like this:
 
 ```bash
-go install github.com/mangalorg/mangalcli
+go install github.com/mangalorg/mangalcli@latest
 ```
 
 Or like this:
