@@ -1,9 +1,11 @@
 package lua
 
 import (
+	"github.com/fatih/camelcase"
 	json "github.com/json-iterator/go"
 	orderedmap "github.com/wk8/go-ordered-map/v2"
 	lua "github.com/yuin/gopher-lua"
+	"strings"
 )
 
 func marshal(value any) (string, error) {
@@ -59,4 +61,13 @@ func luaValueToGo(value lua.LValue) any {
 	default:
 		return nil
 	}
+}
+
+func caseCamelToSnake(s string) string {
+	words := camelcase.Split(s)
+	for i, word := range words {
+		words[i] = strings.ToLower(word)
+	}
+
+	return strings.Join(words, "_")
 }

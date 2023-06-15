@@ -45,5 +45,5 @@ func (r *runCmd) Run(ctx *Context) error {
 		return err
 	}
 
-	return lua.Exec(&client, r.Vars, r.Exec)
+	return lua.Exec(context.Background(), &client, r.Vars, r.Exec)
 }

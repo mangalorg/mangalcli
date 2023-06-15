@@ -6,6 +6,8 @@ as a CLI app.
 
 ## Example
 
+[See more examples here](./examples)
+
 > Documentation is still work in progress... 😪
 
 ```bash
@@ -184,3 +186,4 @@ print(Vars.key2) -- value2
 
 print(tonumber(Vars.key3)) -- 18.2
 ```
+

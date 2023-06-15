@@ -7,9 +7,11 @@ import (
 	"github.com/yuin/gluamapper"
 	lua "github.com/yuin/gopher-lua"
 	luar "layeh.com/gopher-luar"
+	"reflect"
 )
 
 func Exec(
+	ctx context.Context,
 	client *libmangal.Client,
 	vars map[string]string,
 	script string,
@@ -18,7 +20,15 @@ func Exec(
 		SkipOpenLibs: true,
 	})
 
-	state.SetContext(context.Background())
+	state.SetContext(ctx)
+
+	config := luar.GetConfig(state)
+	config.FieldNames = func(s reflect.Type, f reflect.StructField) []string {
+		return []string{caseCamelToSnake(f.Name)}
+	}
+	config.MethodNames = func(t reflect.Type, m reflect.Method) []string {
+		return []string{caseCamelToSnake(m.Name)}
+	}
 
 	for _, injectLib := range []lua.LGFunction{
 		lua.OpenBase,
