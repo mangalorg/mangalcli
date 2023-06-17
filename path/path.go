@@ -6,15 +6,6 @@ import (
 	"path/filepath"
 )
 
-func Config() string {
-	configDir, err := os.UserConfigDir()
-	if err != nil {
-		return filepath.Join("."+meta.AppName, "config")
-	}
-
-	return filepath.Join(configDir, meta.AppName)
-}
-
 func Cache() string {
 	cacheDir, err := os.UserCacheDir()
 	if err != nil {

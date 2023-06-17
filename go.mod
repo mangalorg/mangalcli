@@ -6,8 +6,9 @@ require (
 	github.com/alecthomas/kong v0.7.1
 	github.com/fatih/camelcase v1.0.0
 	github.com/json-iterator/go v1.1.12
+	github.com/ktr0731/go-fuzzyfinder v0.7.0
 	github.com/mangalorg/libmangal v0.3.2
-	github.com/mangalorg/luaprovider v0.3.3
+	github.com/mangalorg/luaprovider v0.3.5
 	github.com/philippgille/gokv v0.6.0
 	github.com/philippgille/gokv/bbolt v0.6.0
 	github.com/philippgille/gokv/encoding v0.6.0
@@ -25,15 +26,20 @@ require (
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/buger/jsonparser v1.1.1 // indirect
 	github.com/cixtor/readability v1.0.0 // indirect
+	github.com/gdamore/encoding v1.0.0 // indirect
+	github.com/gdamore/tcell/v2 v2.6.0 // indirect
 	github.com/hhrutter/lzw v1.0.0 // indirect
 	github.com/hhrutter/tiff v1.0.0 // indirect
 	github.com/ka-weihe/fast-levenshtein v0.0.0-20201227151214-4c99ee36a1ba // indirect
+	github.com/ktr0731/go-ansisgr v0.1.0 // indirect
+	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-runewidth v0.0.14 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/mvdan/xurls v1.1.0 // indirect
+	github.com/nsf/termbox-go v1.1.1 // indirect
 	github.com/pdfcpu/pdfcpu v0.4.1 // indirect
 	github.com/philippgille/gokv/syncmap v0.6.0 // indirect
 	github.com/philippgille/gokv/util v0.6.0 // indirect
@@ -49,6 +55,7 @@ require (
 	golang.org/x/net v0.11.0 // indirect
 	golang.org/x/sync v0.3.0 // indirect
 	golang.org/x/sys v0.9.0 // indirect
+	golang.org/x/term v0.9.0 // indirect
 	golang.org/x/text v0.10.0 // indirect
 	gopkg.in/sourcemap.v1 v1.0.5 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect

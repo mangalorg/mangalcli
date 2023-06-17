@@ -1,5 +1,7 @@
 # mangalcli-fzf
 
+See also [fzf-native](../fzf-native)
+
 In this example, `mangalcli` is wrapped in a shell script that
 uses `fzf` to interactively select manga/volume/chapter which it will
 open for reading in the end
@@ -7,7 +9,7 @@ open for reading in the end
 ## Usage
 
 ```bash
-mangalcli-fzf.sh <path to lua provider> <manga title to search>
+run.sh <path to lua provider> <manga title to search>
 ```
 
 [![asciicast](https://asciinema.org/a/591780.svg)](https://asciinema.org/a/591780)

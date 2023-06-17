@@ -10,11 +10,16 @@ import (
 	"reflect"
 )
 
+type ExecOptions struct {
+	Client    *libmangal.Client
+	Anilist   *libmangal.Anilist
+	Variables map[string]string
+}
+
 func Exec(
 	ctx context.Context,
-	client *libmangal.Client,
-	vars map[string]string,
 	script string,
+	options ExecOptions,
 ) error {
 	state := lua.NewState(lua.Options{
 		SkipOpenLibs: true,
@@ -40,34 +45,44 @@ func Exec(
 	}
 
 	varsTable := state.NewTable()
-	for key, value := range vars {
+	for key, value := range options.Variables {
 		varsTable.RawSetString(key, lua.LString(value))
 	}
 
 	state.SetGlobal("Vars", varsTable)
-	state.Register("SearchMangas", newSearchMangas(client))
-	state.Register("MangaVolumes", newMangaVolumes(client))
-	state.Register("VolumeChapters", newVolumeChapters(client))
-	state.Register("ChapterPages", newChapterPages(client))
-	state.Register("DownloadChapter", newDownloadChapter(client))
+	state.Register(
+		"SearchMangas",
+		newClientDependentFunction(options.Client, newSearchMangas),
+	)
 
-	state.RegisterModule("json", map[string]lua.LGFunction{
-		"print": func(state *lua.LState) int {
-			value := state.CheckAny(1)
-			json, err := marshal(luaValueToGo(value))
-			if err != nil {
-				state.RaiseError(err.Error())
-			}
+	state.Register(
+		"MangaVolumes",
+		newClientDependentFunction(options.Client, newMangaVolumes),
+	)
 
-			fmt.Println(json)
-			return 0
-		},
-	})
+	state.Register(
+		"VolumeChapters",
+		newClientDependentFunction(options.Client, newVolumeChapters),
+	)
+
+	state.Register(
+		"ChapterPages",
+		newClientDependentFunction(options.Client, newChapterPages),
+	)
+
+	state.Register(
+		"DownloadChapter",
+		newClientDependentFunction(options.Client, newDownloadChapter),
+	)
+
+	state.RegisterModule("json", moduleJSON)
+	state.RegisterModule("fzf", moduleFZF)
 
 	state.RegisterModule("anilist", map[string]lua.LGFunction{
-		"find_closest_manga": newAnilistFindClosestManga(client.Options.Anilist),
-		"search_mangas":      newAnilistSearchMangas(client.Options.Anilist),
-		"get_by_id":          newAnilistGetByID(client.Options.Anilist),
+		"find_closest_manga": newAnilistFindClosestManga(options.Anilist),
+		"search_mangas":      newAnilistSearchMangas(options.Anilist),
+		"get_manga_by_id":    newAnilistGetByID(options.Anilist),
+		"bind_title_to_id":   newAnilistBind(options.Anilist),
 	})
 
 	lFunction, err := state.LoadString(script)
@@ -80,6 +95,20 @@ func Exec(
 		NRet:    1,
 		Protect: true,
 	})
+}
+
+func newClientDependentFunction(
+	client *libmangal.Client,
+	fn func(*libmangal.Client) lua.LGFunction,
+) lua.LGFunction {
+	if client == nil {
+		return func(state *lua.LState) int {
+			state.RaiseError("provider not loaded, try --provider <path>")
+			return 0
+		}
+	}
+
+	return fn(client)
 }
 
 func newSearchMangas(client *libmangal.Client) lua.LGFunction {
@@ -395,5 +424,19 @@ func newAnilistGetByID(anilist *libmangal.Anilist) lua.LGFunction {
 
 		state.Push(luar.New(state, manga))
 		return 1
+	}
+}
+
+func newAnilistBind(anilist *libmangal.Anilist) lua.LGFunction {
+	return func(state *lua.LState) int {
+		title := state.CheckString(1)
+		id := state.CheckNumber(2)
+
+		err := anilist.BindTitleWithID(title, int(id))
+		if err != nil {
+			state.RaiseError(err.Error())
+		}
+
+		return 0
 	}
 }

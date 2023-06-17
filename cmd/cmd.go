@@ -11,9 +11,9 @@ type Context struct {
 }
 
 var cmd struct {
-	Anilist anilistCmd `cmd:""`
-	Run     runCmd     `cmd:""`
-	Log     string     `enum:"stdout,stderr,none" default:"none" help:"Logging output. Possible values: stdout, stderr, none"`
+	Run   runCmd   `cmd:"" help:"Run given script as string"`
+	Cache cacheCmd `cmd:"" help:"Cache manipulation"`
+	Log   string   `enum:"stdout,stderr,none" default:"none" help:"Logging output. Possible values: stdout, stderr, none"`
 }
 
 func Run() {

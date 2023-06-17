@@ -3,7 +3,7 @@
 set -euo pipefail
 
 
-EXEC=$(cat <<-EOF
+SCRIPT=$(cat <<-EOF
 local mangas = SearchMangas(Vars.search)
 
 if not Vars.manga then
@@ -50,7 +50,7 @@ EOF
 
 )
 
-SCRIPT="$1"
+PROVIDER="$1"
 SEARCH="$2"
 
 select_one() {
@@ -58,7 +58,7 @@ select_one() {
 }
 
 M() {
-  mangalcli run "$SCRIPT" --vars="$1" --exec "$EXEC"
+  mangalcli run "$SCRIPT" --provider "$PROVIDER" --vars="$1"
 }
 
 VARS="search=$SEARCH"
