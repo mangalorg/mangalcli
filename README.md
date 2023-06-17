@@ -1,4 +1,7 @@
-# MangalCLI
+<div align="center">
+  <img width="150px" alt="robot hand" src="https://github.com/mangalorg/mangalcli/assets/62389790/04dafa26-07af-42d9-a1bb-ce6693d52374">
+  <h1>MangalCLI</h1>
+</div>
 
 Frontend for the [libmangal](https://github.com/mangalorg/libmangal) and
 [luaprovider](https://github.com/mangalorg/luaprovider) wrapped
