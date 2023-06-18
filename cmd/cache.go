@@ -13,12 +13,13 @@ type cacheCmd struct {
 
 type cachePathCmd struct{}
 
-func (c *cachePathCmd) Run(*Context) {
+func (c *cachePathCmd) Run() error {
 	fmt.Println(path.Cache())
+	return nil
 }
 
 type cacheClearCmd struct{}
 
-func (c *cacheClearCmd) Run(*Context) {
-	fs.FS.RemoveAll(path.Cache())
+func (c *cacheClearCmd) Run() error {
+	return fs.FS.RemoveAll(path.Cache())
 }

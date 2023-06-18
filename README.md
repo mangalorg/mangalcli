@@ -23,6 +23,8 @@ mangalcli run "$(cat run.lua)" --vars="title=chainsaw man" --provider mangapill.
 
 `mangapill.lua` looks like [this](https://github.com/mangalorg/saturno/blob/261c5739eacb73525fbe52705b8862a11c14040f/luas/mangapill.lua);
 
+> You can download it by using `mangalcli download` command
+
 `run.lua` looks like this:
 
 ```lua
@@ -82,6 +84,12 @@ Or like this:
 git clone github.com/mangalorg/mangalcli
 cd mangalcli
 go install .
+```
+
+To download lua providers (e.g. mangapill) use this command
+
+```bash
+mangalcli download
 ```
 
 ## Scripts
@@ -252,6 +260,9 @@ Commands:
 
   cache clear
     Remove cache directory
+
+  download
+    Download lua providers from GitHub
 
 Run "mangalcli <command> --help" for more information on a command.
 ```

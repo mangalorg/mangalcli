@@ -4,11 +4,13 @@ go 1.20
 
 require (
 	github.com/alecthomas/kong v0.7.1
+	github.com/charmbracelet/log v0.2.2
 	github.com/fatih/camelcase v1.0.0
+	github.com/gobwas/glob v0.2.3
 	github.com/json-iterator/go v1.1.12
 	github.com/ktr0731/go-fuzzyfinder v0.7.0
 	github.com/mangalorg/libmangal v0.3.2
-	github.com/mangalorg/luaprovider v0.3.5
+	github.com/mangalorg/luaprovider v0.3.6
 	github.com/philippgille/gokv v0.6.0
 	github.com/philippgille/gokv/bbolt v0.6.0
 	github.com/philippgille/gokv/encoding v0.6.0
@@ -23,21 +25,27 @@ require (
 	github.com/JohannesKaufmann/html-to-markdown v1.4.0 // indirect
 	github.com/PuerkitoBio/goquery v1.8.1 // indirect
 	github.com/andybalholm/cascadia v1.3.2 // indirect
+	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/buger/jsonparser v1.1.1 // indirect
+	github.com/charmbracelet/lipgloss v0.7.1 // indirect
 	github.com/cixtor/readability v1.0.0 // indirect
 	github.com/gdamore/encoding v1.0.0 // indirect
 	github.com/gdamore/tcell/v2 v2.6.0 // indirect
+	github.com/go-logfmt/logfmt v0.6.0 // indirect
 	github.com/hhrutter/lzw v1.0.0 // indirect
 	github.com/hhrutter/tiff v1.0.0 // indirect
 	github.com/ka-weihe/fast-levenshtein v0.0.0-20201227151214-4c99ee36a1ba // indirect
 	github.com/ktr0731/go-ansisgr v0.1.0 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
+	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/mattn/go-runewidth v0.0.14 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/muesli/reflow v0.3.0 // indirect
+	github.com/muesli/termenv v0.15.1 // indirect
 	github.com/mvdan/xurls v1.1.0 // indirect
 	github.com/nsf/termbox-go v1.1.1 // indirect
 	github.com/pdfcpu/pdfcpu v0.4.1 // indirect

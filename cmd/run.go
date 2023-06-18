@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"context"
-	"fmt"
+	"github.com/charmbracelet/log"
 	"github.com/mangalorg/libmangal"
 	"github.com/mangalorg/luaprovider"
 	"github.com/mangalorg/mangalcli/cache"
@@ -12,10 +12,10 @@ import (
 	"os"
 )
 
-func newAnilist(ctx *Context) libmangal.Anilist {
+func newAnilist() libmangal.Anilist {
 	options := libmangal.DefaultAnilistOptions()
 	options.Log = func(msg string) {
-		fmt.Fprintln(ctx.LogWriter, msg)
+		log.Info(msg)
 	}
 
 	options.QueryToIDsStore = cache.New("query-to-id")
@@ -32,8 +32,8 @@ type runCmd struct {
 	Provider string            `help:"Path to the lua provider" optional:"" type:"existingfile"`
 }
 
-func (r *runCmd) Run(ctx *Context) error {
-	anilist := newAnilist(ctx)
+func (r *runCmd) Run() error {
+	anilist := newAnilist()
 
 	var client *libmangal.Client
 
@@ -55,7 +55,7 @@ func (r *runCmd) Run(ctx *Context) error {
 		clientOptions.Anilist = &anilist
 		clientOptions.FS = fs.FS
 		clientOptions.Log = func(msg string) {
-			fmt.Fprintln(ctx.LogWriter, msg)
+			log.Info(msg)
 		}
 
 		c, err := libmangal.NewClient(context.Background(), loader, clientOptions)
